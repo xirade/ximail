@@ -1,0 +1,49 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap");
+
+* {
+  font-family: "Comfortaa", cursive;
+}
+
+.table-responsive {
+  max-width: 1000px;
+}
+
+.table-responsive tr {
+  height: 60px;
+}
+
+.table-responsive td p {
+  max-height: 1.4em;
+  overflow-y: hidden;
+}
+
+.clickable,
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.date {
+  width: 120px;
+}
+
+a {
+  cursor: pointer;
+}
+
+button {
+  outline: 0;
+}
+
+.btn:hover img {
+  filter: brightness(0) invert(1);
+}
+
+/* switch transitions */
+.switch-enter-from,
+.switch-leave-to {
+  opacity: 0;
+}
+.switch-enter-active,
+.switch-leave-active {
+  transition: all 0.5s ease;
+}
