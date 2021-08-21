@@ -3,12 +3,19 @@ import { createStore } from "vuex";
 
 const store = createStore({
   state: {
-    user: null
+    user: null,
+    error: ""
   },
 
   actions: {
-    async signUp({ dispatch }, { email, password, displayName }) {
+    async signUp({ dispatch, state }, { email, password, displayName }) {
       try {
+        if (!displayName.value.match(/[A-Za-z]{3,9}/)) {
+          throw Error("Name field must contain only letters and limited to 9 characters");
+        }
+        if (password.value.length < 7) {
+          throw Error("Password length is less 6 symbols");
+        }
         const res = await projectAuth.createUserWithEmailAndPassword(email.value, password.value);
         if (!res) {
           throw new Error("Could not complete the signup");
@@ -20,31 +27,35 @@ const store = createStore({
           displayName: name
         });
       } catch (err) {
+        state.error = err.message;
         console.log(err.message);
       }
     },
-    async login({ dispatch }, { email, password }) {
+    async login({ dispatch, state }, { email, password }) {
       try {
         const res = await projectAuth.signInWithEmailAndPassword(email.value, password.value);
         dispatch("setUser", res.user);
       } catch (err) {
+        state.error = err.message;
         console.log(err.message);
       }
     },
-    async loginGoogle({ dispatch }) {
+    async loginGoogle({ dispatch, state }) {
       const provider = new googleAuth.GoogleAuthProvider();
       try {
         const res = await projectAuth.signInWithPopup(provider);
         dispatch("setUser", res.user);
       } catch (err) {
+        state.error = err.message;
         console.log(err.message);
       }
     },
-    async logout({ commit }) {
+    async logout({ commit, state }) {
       try {
         await projectAuth.signOut();
         commit("LOGOUT");
       } catch (err) {
+        state.error = err.message;
         console.log(err.message);
       }
     },
@@ -65,6 +76,9 @@ const store = createStore({
   getters: {
     getUser(state) {
       return state.user;
+    },
+    getError(state) {
+      return state.error;
     }
   }
 });

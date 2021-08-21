@@ -31,10 +31,6 @@ export default {
 </script>
 
 <style>
-body {
-  background-color: #fafafa;
-}
-
 h1::before,
 h1::after {
   content: url(./assets/img/x-diamond-fill.svg);

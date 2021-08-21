@@ -44,13 +44,16 @@ import { useStore } from "vuex";
 import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 import useCollection from "../../composables/useCollection";
-import { computed } from '@vue/runtime-core';
-import { timestamp } from '../../firebase/config';
+import { computed } from "@vue/runtime-core";
+import { timestamp } from "../../firebase/config";
 export default {
   setup() {
     const store = useStore();
     const user = computed(() => {
       return store.getters.getUser;
+    });
+    const error = computed(() => {
+      return store.getters.getError;
     });
     const router = useRouter();
     const { addDoc } = useCollection("emails");
@@ -58,10 +61,9 @@ export default {
     const email = ref("");
     const password = ref("");
     const displayName = ref("");
-    const error = ref("");
 
-    const handleSubmit = () => {
-      store
+    const handleSubmit = async () => {
+      await store
         .dispatch("signUp", { email, password, displayName })
         .then(() => {
           addDoc({
@@ -83,7 +85,6 @@ export default {
           router.push({ name: "Home" });
         })
         .catch(err => {
-          error.value = err.message;
           console.log(err.message);
         });
     };
